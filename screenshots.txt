@@ -3,7 +3,7 @@
 2.- Job failed because of unit tests. [SCREENSHOT02]
     file://./SCREENSHOT02.png
 3.- Job that failed because of vulnerable packages. [SCREENSHOT03]
-
+    file://./SCREENSHOT03.png
 4.- An alert from one of your failed builds. [SCREENSHOT04]
 
 5.- Appropriate job failure for infrastructure creation. [SCREENSHOT05]
