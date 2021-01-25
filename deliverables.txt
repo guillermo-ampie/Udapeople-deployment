@@ -1,0 +1,6 @@
+1.- Selling CI/CD Presentation: file://./selling_ci_cd.pdf
+
+2.- URLs: file://./urls.txt
+
+3.- Screenshots: file://./screenshots.txt
+
