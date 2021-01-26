@@ -5,7 +5,7 @@
 3.- Job that failed because of vulnerable packages. [SCREENSHOT03]
     file://./SCREENSHOT03.png
 4.- An alert from one of your failed builds. [SCREENSHOT04]
-
+    file://./SCREENSHOT04.png
 5.- Appropriate job failure for infrastructure creation. [SCREENSHOT05]
 
 6.- Appropriate job failure for the smoke test job. [SCREENSHOT06]
