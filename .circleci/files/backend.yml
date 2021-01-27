@@ -28,10 +28,12 @@ Resources:
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: InstanceSecurityGroup
-      KeyName: udacity # If you use another key pair name, you should change this value to match.
+      KeyName: key-pair-us-west-2 # If you use another key pair name, you should change this value to match.
       # If this ami id is not available for you, you can find another (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
       # Ubuntu 18 or higher works fine
-      ImageId: ami-068663a3c619dd892 
+      # Ubuntu Server 20.04 LTS (HVM), SSD Volume Type 
+      # - ami-07dd19a7900a1f049 (64-bit x86) / ami-03c1b544a7566b3e5 (64-bit Arm)
+      ImageId: ami-07dd19a7900a1f049 
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}
