@@ -190,7 +190,7 @@ jobs:
             #   --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
-          working_directory: ./circleci/ansible 
+          working_directory: .circleci/ansible 
           command: |
             # Your code here
             echo "[web]" > inventory.txt
@@ -208,10 +208,7 @@ jobs:
     docker:
       # Docker image here that supports Ansible
       - image: python:3.9.1-alpine3.12
-    steps:
-      - run:
-          command: |
-            apk add --update git # circleci local cli seems not to have git installed    
+    steps:   
       # Checkout code from git
       - checkout
       # Add ssh keys with fingerprint
