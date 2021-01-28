@@ -29,7 +29,10 @@
     state: present
 
 - name: "ensure the app runs at startup"
-  ansible.builtin.shell: pm2 startup -u ubuntu
+  command: pm2 startup -u ubuntu
+  changed_when: false
+
+  # changed_when: false
 
 # - name: Create directory
 #   file:
