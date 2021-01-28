@@ -209,6 +209,9 @@ jobs:
       # Docker image here that supports Ansible
       - image: python:3.9.1-alpine3.12
     steps:
+      - run:
+          command: |
+            apk add --update git # circleci local cli seems not to have git installed    
       # Checkout code from git
       - checkout
       # Add ssh keys with fingerprint
@@ -224,7 +227,7 @@ jobs:
             apk add --update ansible # install the dependencies needed for your playbook
       - run:
           name: Configure server
-          working_directory: ./circleci/ansible 
+          working_directory: .circleci/ansible 
           command: |
             # Your code here
             ansible-playbook -i inventory.txt configure-server.yml
