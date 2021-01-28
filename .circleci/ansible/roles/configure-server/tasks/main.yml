@@ -30,6 +30,7 @@
 
 - name: "ensure the app runs at startup"
   command: pm2 startup -u ubuntu
+  become: yes
   changed_when: false
 
   # changed_when: false
