@@ -28,6 +28,9 @@
     production: yes
     state: present
 
+- name: "ensure the app runs at startup"
+  ansible.builtin.shell: pm2 startup -u ubuntu
+
 # - name: Create directory
 #   file:
 #     path: ~/web
