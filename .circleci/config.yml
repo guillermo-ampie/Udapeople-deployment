@@ -245,8 +245,8 @@ jobs:
           command: |
             # Your code here
             npm install
-            # npm run migrations > migrations.log
-            echo "has been executed successfully" >migrations.log
+            npm run migrations > migrations.log
+            # echo "has been executed XXXXXsuccessfully" >migrations.log
             cat migrations.log
       - run:
           name: Send migration results to memstash
@@ -281,6 +281,7 @@ jobs:
           name: Get backend url
           command: |
             # your code here
+            # The following echo commands are needed when running circleci local cli
             # echo "[web]" > .circleci/ansible/inventory.txt
             # echo "34.219.129.153" >> .circleci/ansible/inventory.txt
             BACKEND_IP=$(grep -v "web" .circleci/ansible/inventory.txt)
@@ -306,22 +307,31 @@ jobs:
             aws s3 sync dist s3://udapeople-bf43fab --delete
       # Here's where you will add some code to rollback on failure      
                     
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.9.1-alpine3.12
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["e1:84:f7:0e:6f:c5:70:96:82:7f:6f:1c:31:45:a9:cd"]       
+      # attach workspace
+      - attach_workspace:
+          at: ~/         
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            apk add --update ansible # install the dependencies needed for your playbook
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+            echo "Deploying backend pending!!!"
+
+      # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
 #     docker:
