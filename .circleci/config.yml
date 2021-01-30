@@ -339,10 +339,10 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-            tar -C backend/dist -czvf \
+            tar -C backend/dist -czf \
               .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             echo "---ls---"  
-            ls *.tar.gz
+            ls *.tar.gz || return 0
             ls .circleci/ansible/roles/deploy/files/
             echo "---ls---"
             export ANSIBLE_HOST_KEY_CHECKING=False  
