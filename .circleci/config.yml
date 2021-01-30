@@ -329,8 +329,10 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-            echo "Deploying backend pending!!!"
-
+            tar -C backend/dist -czvf \
+              .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
+            ansible-playbook -i .circleci/ansible/inventory.txt \
+              .circleci/ansible/deploy-backend.yml  
       # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:

@@ -1,0 +1,29 @@
+---
+- name: Create backend directory
+  file:
+    path: ~/backend
+    state: directory
+    mode: '644'
+
+# - name: Copy backend dist artifact file
+#   owner: ubuntu
+#   mode: '644'
+#   copy:
+#     src: backend-artifact.tar.gz
+#     dest: ~/backend
+
+- name: Unarchive backend dist artifact backend-artifact.tar.gz
+  unarchive:
+    owner: ubuntu
+    mode: '644'
+    src: backend-artifact.tar.gz
+    dest: ~/backend
+    remote_src: yes
+
+- name: start pm2
+  become: yes
+  become_user: ubuntu
+  changed_when: false
+  command: pm2 start --name backend npm -- start
+  args:
+    chdir: /home/ubuntu/backend
