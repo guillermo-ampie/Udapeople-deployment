@@ -297,6 +297,7 @@ jobs:
           command: |
             npm install
             npm run build
+            echo "Making the build..."
       - run:
           name: Deploy frontend objects
           working_directory: frontend
