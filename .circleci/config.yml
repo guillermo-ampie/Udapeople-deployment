@@ -304,7 +304,8 @@ jobs:
             # your code here
             # aws s3 sync dist s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --delete
             # simulating we ran again deploy-infrastructure job
-            aws s3 sync dist s3://udapeople-bf43fab --delete
+            # aws s3 sync dist s3://udapeople-bf43fab --delete
+            echo "Deploying frontend files to S3 bucket"
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
