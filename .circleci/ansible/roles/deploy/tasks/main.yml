@@ -3,7 +3,7 @@
   file:
     path: ~/backend
     state: directory
-    mode: '644'
+    mode: '775'
 
 # - name: Copy backend dist artifact file
 #   owner: ubuntu
