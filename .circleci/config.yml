@@ -295,8 +295,8 @@ jobs:
           name: Build frontend one last time
           working_directory: frontend 
           command: |
-            npm install
-            npm run build
+            # npm install
+            # npm run build
             echo "Making the build..."
       - run:
           name: Deploy frontend objects
@@ -343,7 +343,7 @@ jobs:
             tar -C backend/dist -czf \
               .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             echo "---ls---"  
-            ls *.tar.gz || return 0
+            ls *.tar.gz || echo
             ls .circleci/ansible/roles/deploy/files/
             echo "---ls---"
             export ANSIBLE_HOST_KEY_CHECKING=False  
