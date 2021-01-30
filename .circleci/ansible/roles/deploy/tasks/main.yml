@@ -5,18 +5,18 @@
     state: directory
     mode: '775'
 
-# - name: Copy backend dist artifact file
-#   owner: ubuntu
-#   mode: '644'
-#   copy:
-#     src: backend-artifact.tar.gz
-#     dest: ~/backend
+- name: Copy backend dist artifact file
+  copy:
+    owner: ubuntu
+    mode: '644'
+    src: backend-artifact.tar.gz
+    dest: "~/"
 
 - name: Unarchive backend dist artifact backend-artifact.tar.gz
   unarchive:
     owner: ubuntu
     mode: '644'
-    src: .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz
+    src: ~/backend-artifact.tar.gz
     dest: ~/backend
     remote_src: yes
 
