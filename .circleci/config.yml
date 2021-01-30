@@ -325,7 +325,8 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apt -y install python3 ansible
+            sudo apt update
+            sudo apt -y install python3 ansible
       - restore_cache:
           keys: [backend-build--v1]     
       - run:
