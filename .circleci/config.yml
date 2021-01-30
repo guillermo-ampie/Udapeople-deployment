@@ -340,7 +340,7 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-            tar -C backend/dist -czf \
+            tar -C backend -czf \
               .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             echo "---ls---"  
             ls .circleci/ansible/roles/deploy/files/
