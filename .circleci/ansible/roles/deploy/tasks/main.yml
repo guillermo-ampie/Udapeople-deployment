@@ -17,7 +17,7 @@
     owner: ubuntu
     mode: '644'
     src: ~/backend-artifact.tar.gz
-    dest: ~/backend
+    dest: ~/backend/
     remote_src: yes
 
 - name: start pm2
