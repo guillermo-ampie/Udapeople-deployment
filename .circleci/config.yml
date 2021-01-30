@@ -70,7 +70,7 @@ jobs:
              npm install
              npm run-script build
       - save_cache:
-          paths: [backend/node_modules]
+          paths: [backend/node_modules, backend/dist]
           key: backend-build--v1
 
   test-frontend:
