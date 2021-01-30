@@ -15,9 +15,9 @@
 - name: Unarchive backend dist artifact backend-artifact.tar.gz
   unarchive:
     owner: ubuntu
-    mode: '644'
+    # mode: '644'
     src: ~/backend-artifact.tar.gz
-    dest: ~/backend/
+    dest: ~/backend
     remote_src: yes
 
 - name: start pm2
