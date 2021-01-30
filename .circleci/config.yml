@@ -61,7 +61,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build--v2]
+          keys: [backend-build--v1]
       - run:
           name: Back-end build
           working_directory: backend
@@ -70,8 +70,8 @@ jobs:
              npm install
              npm run-script build
       - save_cache:
-          paths: [backend/node_modules, backend/dist]
-          key: backend-build--v2
+          paths: [backend/node_modules]
+          key: backend-build--v1
 
   test-frontend:
     docker:
@@ -104,7 +104,7 @@ jobs:
       - checkout        
       # Restore from cache
       - restore_cache:
-          keys: [backend-build--v2]      
+          keys: [backend-build--v1]      
       # Your job code here
       - run:
           name: Test backend-end
@@ -143,7 +143,7 @@ jobs:
       - checkout        
       # Restore from cache
       - restore_cache:
-          keys: [backend-build--v2]   
+          keys: [backend-build--v1]   
       # Your job code here
       - run:
           name: Scan back-end
@@ -238,7 +238,7 @@ jobs:
       # Checkout code from git
       - checkout
       - restore_cache:
-          keys: [backend-build--v2]  
+          keys: [backend-build--v1]  
       - run:
           name: Run migrations
           working_directory: backend 
@@ -327,12 +327,19 @@ jobs:
             # your code here
             apk add --update ansible # install the dependencies needed for your playbook
       - restore_cache:
-          keys: [backend-build--v2]            
+          keys: [backend-build--v1]     
+      - run:
+          name: Get a fresh backend build
+          working_directory: backend
+          command: |
+            # Your code here
+            npm install
+            npm run-script build                 
       - run:
           name: Deploy backend
           command: |
             # your code here
-            tar -C ~/project/backend/dist -czvf \
+            tar -C backend/dist -czvf \
               .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             ansible-playbook -i .circleci/ansible/inventory.txt \
               .circleci/ansible/deploy-backend.yml  
