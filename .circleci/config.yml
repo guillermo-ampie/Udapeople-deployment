@@ -343,7 +343,6 @@ jobs:
             tar -C backend/dist -czf \
               .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             echo "---ls---"  
-            ls *.tar.gz || echo
             ls .circleci/ansible/roles/deploy/files/
             echo "---ls---"
             export ANSIBLE_HOST_KEY_CHECKING=False  
