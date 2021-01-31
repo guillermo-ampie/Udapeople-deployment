@@ -44,7 +44,7 @@ commands:
           working_directory: backend
           command: |
             echo "ENVIRONMENT=production" >> .env
-            # echo "NODE_ENV=production" >> .env
+            echo "NODE_ENV=production" >> .env
             echo "TYPEORM_CONNECTION=postgres" >> .env
             echo "TYPEORM_MIGRATIONS_DIR=./src/migrations" >> .env
             echo "TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts" >> .env
