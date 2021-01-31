@@ -12,7 +12,7 @@
     src: backend-artifact.tar.gz
     dest: "~/"
 
-- name: Unarchive backend dist artifact backend-artifact.tar.gz
+- name: Unarchive backend artifact "backend-artifact.tar.gz"
   unarchive:
     owner: ubuntu
     # mode: '644'
@@ -20,11 +20,11 @@
     dest: ~/backend
     remote_src: yes
 
-- name: start pm2
+- name: start backend service
   become: yes
   become_user: ubuntu
   changed_when: false
-  command: pm2 start --name backend npm -- start
+  command: pm2 stop backend; pm2 start --name backend npm -- start
   args:
     chdir: ~/backend
 
