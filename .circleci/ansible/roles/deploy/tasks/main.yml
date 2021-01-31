@@ -24,7 +24,7 @@
   become: yes
   become_user: ubuntu
   changed_when: false
-  command: pm2 stop backend; pm2 start --name backend npm -- start
+  command: pm2 stop backend || exit 0; pm2 start --name backend npm -- start
   args:
     chdir: ~/backend
 
