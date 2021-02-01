@@ -24,7 +24,7 @@
   become: yes
   become_user: ubuntu
   changed_when: false
-  command: (curl -s localhost:3030/api/status) || pm2 start --name backend npm -- start
+  command: (/usr/bin/curl -s localhost:3030/api/status) || pm2 start --name backend npm -- start
   args:
     chdir: ~/backend
 
