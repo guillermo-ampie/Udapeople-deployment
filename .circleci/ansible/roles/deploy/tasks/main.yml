@@ -20,12 +20,18 @@
     dest: ~/backend
     remote_src: yes
 
+- name: stop backend service
+  become: yes
+  become_user: ubuntu
+  changed_when: false
+  # // the first time there is no backend service running
+  ignore_errors: yes  
+  command: pm2 stop backend
+
 - name: start backend service
   become: yes
   become_user: ubuntu
   changed_when: false
-  ignore_errors: yes
-  command: pm2 stop backend || pm2 start --name backend npm -- start
+  command: pm2 start --name backend npm -- start
   args:
     chdir: ~/backend
-
