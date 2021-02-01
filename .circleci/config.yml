@@ -350,7 +350,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            sudo apt -y install python3 ansible
+            sudo apt -yq install python3 ansible
       - restore_cache:
           keys: [backend-build--v1]
       - setup-backend-environment-variables      
