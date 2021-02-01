@@ -367,9 +367,6 @@ jobs:
             # your code here
             tar -C backend -czf \
               .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
-            echo "---ls---"  
-            ls .circleci/ansible/roles/deploy/files/
-            echo "---ls---"
             export ANSIBLE_HOST_KEY_CHECKING=False  
             ansible-playbook -i .circleci/ansible/inventory.txt \
               .circleci/ansible/deploy-backend.yml  
