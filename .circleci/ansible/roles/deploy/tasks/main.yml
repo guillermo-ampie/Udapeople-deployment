@@ -5,7 +5,7 @@
     state: directory
     mode: '775'
 
-- name: Copy backend dist artifact file
+- name: Copy backend artifact file
   copy:
     owner: ubuntu
     mode: '644'
