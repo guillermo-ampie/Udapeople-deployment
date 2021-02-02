@@ -397,7 +397,9 @@ jobs:
             # your code here
             BACKEND_IP=$(grep -v "web" .circleci/ansible/inventory.txt)
             API_STATUS_URL="http://${BACKEND_IP}:3030/api/status"
+            echo "---BACKEND_IP---"
             echo $BACKEND_IP
+            echo "---BACKEND_IP---"
             echo $API_STATUS_URL > ~/backend-url.txt
             echo "---API_STATUS_URL---"
             echo $API_STATUS_URL
