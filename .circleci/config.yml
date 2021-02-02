@@ -388,6 +388,17 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
+            # FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
+            # Testing: When simulating/skipping the create-infrastructure job..., 
+            FRONTEND_URL="http://udapeople-bf43fab.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
+            if curl -s $FRONTEND_URL | grep "ok"
+            then
+              echo "Frontend: up and running!!!"
+              return 0
+            else
+              echo "Frontend: it seems it is not running..."
+              return 1
+            fi            
       - attach_workspace:
           # Here we have inventory.txt
           at: ~/
@@ -396,14 +407,14 @@ jobs:
           command: |
             # your code here
             BACKEND_IP=$(grep -v "web" .circleci/ansible/inventory.txt)
-            API_STATUS_URL="http://${BACKEND_IP}:3030/api/status"
-            echo $API_STATUS_URL > ~/backend-url.txt
+            BACKEND_STATUS_URL="http://${BACKEND_IP}:3030/api/status"
+            echo $BACKEND_STATUS_URL > ~/backend-url.txt
       - run:
           name: Backend smoke test.
           command: |
             # your code here
-            API_STATUS_URL=$(cat ~/backend-url.txt)
-            if curl -s $API_STATUS_URL | grep "ok"
+            BACKEND_STATUS_URL=$(cat ~/backend-url.txt)
+            if curl -s $BACKEND_STATUS_URL | grep "ok"
             then
               echo "Backend: up and running!!!"
               return 0
