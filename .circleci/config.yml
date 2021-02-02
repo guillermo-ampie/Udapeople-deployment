@@ -5,17 +5,31 @@ orbs:
 
 
 commands:
-#   destroy-environment:
-#     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-#     parameters:
-#       # Add parameter here   
-#     steps:
-#       - run:
-#           name: Destroy environments
-#           when: on_fail
-#           command: |
-#             # Your code here
-#             exit 1
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      # Add parameter here
+      ID:
+        description: The ID used to create bucket and stacks
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+      - aws-cli/install
+      - aws-cli/setup
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            # Your code here
+            # Delete objects in S3 bucket
+            aws s3 rm "s3://udapeople-<<parameters.ID>>" --recursive
+            # Delete frontend stack
+            aws cloudformation delete-stack --stack-name \
+              "stack-frontend-<<parameters.ID>>"  
+            # Delete backend stack
+            aws cloudformation delete-stack --stack-name \
+              "stack-backend-<<parameters.ID>>" 
+          
 
 #   revert-migrations:
 #     description: Revert the last migration if successfully run in the current workflow.
@@ -208,7 +222,7 @@ jobs:
             # TODO: frontend created, let's speed up things for now
             # aws cloudformation deploy \
             #   --template-file frontend.yml \
-            #   --tags project=udapeople \
+            #   --tags "project=udapeople" \
             #   --stack-name "stack-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
             #   --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
@@ -421,6 +435,7 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure  
+      - destroy-environment
 
 #   cloudfront-update:
 #     docker:
