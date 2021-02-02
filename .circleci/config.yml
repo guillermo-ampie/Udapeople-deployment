@@ -388,8 +388,6 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            # FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
-            # Testing: When simulating/skipping the create-infrastructure job..., 
             FRONTEND_URL="http://udapeople-bf43fab.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
             if curl -s $FRONTEND_URL | grep "IS THIS OK?"
             then
