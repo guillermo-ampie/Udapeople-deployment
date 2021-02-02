@@ -14,12 +14,12 @@ commands:
         type: string
         default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
-      - aws-cli/install
-      - aws-cli/setup
       - run:
           name: Destroy environments
           when: on_fail
           command: |
+            - aws-cli/install
+            - aws-cli/setup
             # Your code here
             # Delete objects in S3 bucket
             aws s3 rm "s3://udapeople-<<parameters.ID>>" --recursive
