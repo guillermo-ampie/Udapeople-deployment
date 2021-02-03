@@ -19,7 +19,7 @@ commands:
           when: on_fail
           command: |
             # Your code here
-            export TERM=ansi // Fixed: WARNING: terminal is not fully functional
+            export TERM=ansi #Fixed: WARNING: terminal is not fully functional
             # Delete objects in S3 bucket
             aws s3 rm "s3://udapeople-<<parameters.ID>>" --recursive
             # Delete frontend stack
