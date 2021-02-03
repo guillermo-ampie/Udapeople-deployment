@@ -198,7 +198,7 @@ jobs:
       # - aws-cli/setup
       - run:
           command: |
-            yum -yq install tar gzip git
+            yum -y -q install tar gzip git
       # Checkout code from git
       - checkout
       - run:
@@ -392,7 +392,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -yq install tar gzip git curl
+            yum -y -q install tar gzip git curl
       # Checkout code from git
       - checkout            
       - run:
