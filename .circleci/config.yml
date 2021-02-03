@@ -19,6 +19,7 @@ commands:
           when: on_fail
           command: |
             # Your code here
+            export TERM=ansi // Fixed: WARNING: terminal is not fully functional
             # Delete objects in S3 bucket
             aws s3 rm "s3://udapeople-<<parameters.ID>>" --recursive
             # Delete frontend stack
@@ -207,22 +208,22 @@ jobs:
           command: |
             echo "Deploying backend..."
             # TODO: backend created, let's speed up things for now
-            # aws cloudformation deploy \
-            #   --template-file backend.yml \
-            #   --tags "project=udapeople" \
-            #   --stack-name "stack-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            #   --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+            aws cloudformation deploy \
+              --template-file backend.yml \
+              --tags "project=udapeople" \
+              --stack-name "stack-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Ensure front-end infrastructure exist
           working_directory: .circleci/files
           command: |
-            echo "Deploying frontend..."
+            # echo "Deploying frontend..."
             # TODO: frontend created, let's speed up things for now
-            # aws cloudformation deploy \
-            #   --template-file frontend.yml \
-            #   --tags "project=udapeople" \
-            #   --stack-name "stack-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            #   --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+             aws cloudformation deploy \
+               --template-file frontend.yml \
+               --tags "project=udapeople" \
+               --stack-name "stack-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
           working_directory: .circleci/ansible 
@@ -280,9 +281,9 @@ jobs:
           working_directory: backend 
           command: |
             # Your code here
-            # npm install
-            # npm run migrations > migrations.log
-            echo "has been executed XXXXXsuccessfully" >migrations.log
+            npm install
+            npm run migrations > migrations.log
+            # echo "has been executed XXXXXsuccessfully" >migrations.log
             cat migrations.log
       - run:
           name: Send migration results to memstash
@@ -331,18 +332,19 @@ jobs:
           name: Build frontend one last time
           working_directory: frontend 
           command: |
-            # npm install
-            # npm run build
+            npm install
+            npm run build
             echo "Making the build..."
       - run:
           name: Deploy frontend objects
           working_directory: frontend
           command: |
             # your code here
-            # aws s3 sync dist s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --delete
+            echo "Deploying frontend files to S3 bucket"            
+
             # simulating we ran again deploy-infrastructure job
             # aws s3 sync dist s3://udapeople-bf43fab --delete
-            echo "Deploying frontend files to S3 bucket"
+            aws s3 sync dist s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --delete
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -371,17 +373,17 @@ jobs:
           working_directory: backend
           command: |
             # Your code here
-            # npm install
-            # npm run-script build                 
+            npm install
+            npm run-script build                 
       - run:
           name: Deploy backend
           command: |
             # your code here
-            # tar -C backend -czf \
-            #   .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
+            tar -C backend -czf \
+              .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             export ANSIBLE_HOST_KEY_CHECKING=False  
-            # ansible-playbook -i .circleci/ansible/inventory.txt \
-            #   .circleci/ansible/deploy-backend.yml  
+            ansible-playbook -i .circleci/ansible/inventory.txt \
+              .circleci/ansible/deploy-backend.yml  
       # Here's where you will add some code to rollback on failure  
 
   smoke-test:
@@ -400,7 +402,7 @@ jobs:
           command: |
             # your code here
             FRONTEND_URL="http://udapeople-bf43fab.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
-            if curl -s $FRONTEND_URL | grep "IS THIS OK?"
+            if curl -s $FRONTEND_URL | grep "WelcomeZZZZZ"
             then
               echo "Frontend: up and running!!!"
               exit 0
@@ -426,14 +428,14 @@ jobs:
             if curl -s $BACKEND_STATUS_URL | grep "ok"
             then
               echo "Backend: up and running!!!"
-              return 0
+              exit 0
             else
               echo "Backend: it seems it is not running..."
-              return 1
+              exit 1
             fi
       # Here's where you will add some code to rollback on failure      
-      - destroy-environment:
-          ID: bf43fab
+      - destroy-environment
+          # ID: bf43fab
 
 #   cloudfront-update:
 #     docker:
@@ -495,13 +497,13 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
       - smoke-test:
-          # requires: [deploy-backend, deploy-frontend]
-          requires: [deploy-backend]
+          requires: [deploy-backend, deploy-frontend]
+          # requires: [deploy-backend]
       # - cloudfront-update:
       #     requires: [smoke-test]
       # - cleanup:
