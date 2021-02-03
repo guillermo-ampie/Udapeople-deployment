@@ -29,25 +29,32 @@ commands:
             aws cloudformation delete-stack --stack-name \
               "stack-backend-<<parameters.ID>>" 
           
-
-  # revert-migrations:
-  #   description: Revert the last migration if successfully run in the current workflow.
-  #   parameters:
-  #     # Add parameter here     
-  #   steps:
-  #     - run:
-  #         name: Revert migrations
-  #         # Add when this will run
-  #         command: |
-  #           # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-  #           SUCCESS = 1
-  #           if(( $SUCCESS==1 )); 
-  #           then
-  #           #  cd ~/project/backend
-  #           #  npm install
-  #           #  Add revert code here. You can find this in the Getting Started section.
-  #             exit 1
-  #           fi
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here
+      ID:
+        description: The ID used to create bucket and stacks
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID}  
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS=$(curl -H "token: 271ce878-7b96-47f1-ae12-e706830ca519" \
+              --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID})
+            echo "---SUCCESS---"
+            echo "$SUCCESS"
+            echo "---SUCCESS---"
+            if(( $SUCCESS==1 )); 
+            then
+            #  cd ~/project/backend
+            #  npm install
+            #  Add revert code here. You can find this in the Getting Started section.
+              # exit 1
+            fi
 
   setup-backend-environment-variables:
     description: Setup environment variables in "backend/.env" file
@@ -295,6 +302,10 @@ jobs:
             curl -H "Content-Type: text/plain" -H "token: 271ce878-7b96-47f1-ae12-e706830ca519" \
               --request PUT \
               --data "$RESULT" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
+            echo "---CIRCLE_WORKFLOW_ID---"  
+            echo "${CIRCLE_WORKFLOW_ID}"
+            echo "---CIRCLE_WORKFLOW_ID---"  
+
      # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
@@ -436,6 +447,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
       - destroy-environment
           # ID: bf43fab
+      - revert-migrations
 
 #   cloudfront-update:
 #     docker:
