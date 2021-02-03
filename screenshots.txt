@@ -11,7 +11,7 @@
 6.- Appropriate job failure for the smoke test job. [SCREENSHOT06]
     file://./SCREENSHOT06.png
 7 .- Successful rollback after a failed smoke test. [SCREENSHOT07]
-
+    file://./SCREENSHOT06.png
 8.- Successful promotion job. [SCREENSHOT08]
 
 9.- Successful cleanup job. [SCREENSHOT09]
