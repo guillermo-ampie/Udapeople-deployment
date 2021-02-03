@@ -217,9 +217,9 @@ jobs:
             echo "Deploying backend..."
             aws cloudformation deploy \
               --template-file backend.yml \
-              --tags "project=udapeople" \
               --stack-name "stack-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags "project=udapeople"
       - run:
           name: Ensure front-end infrastructure exist
           working_directory: .circleci/files
@@ -227,9 +227,9 @@ jobs:
             echo "Deploying frontend..."
              aws cloudformation deploy \
                --template-file frontend.yml \
-               --tags "project=udapeople" \
                --stack-name "stack-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+               --tags "project=udapeople"
       - run:
           name: Add back-end ip to ansible inventory
           working_directory: .circleci/ansible 
@@ -293,7 +293,6 @@ jobs:
             # Your code here
             npm install
             npm run migrations > migrations.log
-            # echo "has been executed XXXXXsuccessfully" >migrations.log
             cat migrations.log
       - run:
           name: Send migration results to memstash
@@ -480,9 +479,9 @@ jobs:
             # your code here
             aws cloudformation deploy \
               --template-file .circleci/files/cloudfront.yml \
-              --tags "project=udapeople" \
               --stack-name "stack-udapeople-production" \
               --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
+              --tags "project=udapeople"
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations      
