@@ -200,7 +200,7 @@ jobs:
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
-    # - image: cimg/base:2021.01
+      # - image: cimg/base:2021.01
       - image: amazon/aws-cli
     steps:
       # - aws-cli/install
@@ -215,7 +215,6 @@ jobs:
           working_directory: .circleci/files
           command: |
             echo "Deploying backend..."
-            # TODO: backend created, let's speed up things for now
             aws cloudformation deploy \
               --template-file backend.yml \
               --tags "project=udapeople" \
@@ -225,8 +224,7 @@ jobs:
           name: Ensure front-end infrastructure exist
           working_directory: .circleci/files
           command: |
-            # echo "Deploying frontend..."
-            # TODO: frontend created, let's speed up things for now
+            echo "Deploying frontend..."
              aws cloudformation deploy \
                --template-file frontend.yml \
                --tags "project=udapeople" \
@@ -461,20 +459,33 @@ jobs:
       - revert-migrations    
 
 
-#   cloudfront-update:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+      # - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
+    steps:
+      - aws-cli/install
+      - aws-cli/setup    
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            echo "All dependencies already installed..."
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --tags "project=udapeople" \
+              --stack-name "stack-udapeople-production" \
+              --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
+      - revert-migrations      
 
 # cleanup:
 #     docker:
