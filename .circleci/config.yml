@@ -418,8 +418,6 @@ jobs:
           command: |
             curl -sL https://rpm.nodesource.com/setup_14.x | bash -            
             yum -y install tar gzip git curl nodejs
-            node --version
-            npm --version
       # Checkout code from git
       - checkout            
       - run:
@@ -529,8 +527,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-          # requires: [deploy-backend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
