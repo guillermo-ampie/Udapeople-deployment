@@ -409,6 +409,7 @@ jobs:
           command: |
             curl -sL https://rpm.nodesource.com/setup_14.x | bash -            
             yum -y install tar gzip git curl nodejs
+            node --version
             npm --version
       # Checkout code from git
       - checkout            
