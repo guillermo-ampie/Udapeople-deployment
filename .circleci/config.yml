@@ -401,12 +401,15 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: amazon/aws-cli      
-    steps:   
+      - image: amazon/aws-cli
+      # - image: circleci/node:13.8.0
+    steps:
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip git curl
+            curl -sL https://rpm.nodesource.com/setup_14.x | bash -            
+            yum -y install tar gzip git curl nodejs
+            npm --version
       # Checkout code from git
       - checkout            
       - run:
@@ -445,9 +448,10 @@ jobs:
               echo "Backend: it seems it is not running..."
               exit 1
             fi
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure
+      - revert-migrations    
       - destroy-environment
-      - revert-migrations
+
 
 #   cloudfront-update:
 #     docker:
