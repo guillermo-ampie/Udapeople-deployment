@@ -377,8 +377,8 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-            tar -C backend -czf \
-              .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
+            # tar -C backend -czf \
+            #   .circleci/ansible/roles/deploy/files/backend-artifact.tar.gz .
             export ANSIBLE_HOST_KEY_CHECKING=False  
             # ansible-playbook -i .circleci/ansible/inventory.txt \
             #   .circleci/ansible/deploy-backend.yml  
@@ -387,15 +387,12 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: alpine:latest      
-    steps:
-      - aws-cli/install # aws-cli needed if we trigger a roll-back(destroy-environment command)
-      - aws-cli/setup      
+      - image: amazon/aws-cli      
+    steps:   
       - run:
           name: Install dependencies
           command: |
-            # your code here
-            apk add --update curl git
+            yum -y install tar gzip git curl
       # Checkout code from git
       - checkout            
       - run:
