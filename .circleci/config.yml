@@ -41,6 +41,7 @@ commands:
       - run:
           name: Revert migrations
           # Add when this will run
+          when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS=$(curl -H "token: 271ce878-7b96-47f1-ae12-e706830ca519" \
@@ -48,12 +49,15 @@ commands:
             echo "---SUCCESS---"
             echo "$SUCCESS"
             echo "---SUCCESS---"
-            if(( $SUCCESS==1 )); 
+            if(( ${SUCCESS}==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              # exit 1
+              cd ~/project/backend
+              npm install
+              #  Add revert code here. You can find this in the Getting Started section.
+              echo "Reverting migrations..."
+              npm run-script migrations:revert
+            else
+              echo "No migrations to revert!"  
             fi
 
   setup-backend-environment-variables:
@@ -74,9 +78,6 @@ commands:
             echo "TYPEORM_USERNAME=$TYPEORM_USERNAME" >> .env
             echo "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> .env
             echo "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> .env
-            echo "---.env---"
-            cat .env
-            echo "---.env---"
           
 
 jobs:
@@ -446,7 +447,6 @@ jobs:
             fi
       # Here's where you will add some code to rollback on failure      
       - destroy-environment
-          # ID: bf43fab
       - revert-migrations
 
 #   cloudfront-update:
