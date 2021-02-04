@@ -474,6 +474,19 @@ jobs:
             # your code here
             echo "All dependencies already installed..."
       - run:
+          name: Save old workflow ID
+          command: |
+            aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text > ~/old-workflow-id.txt
+            echo "---OLD-WORKFLOW-ID"  
+            cat ~/old-workflow-id.txt
+            echo "---OLD-WORKFLOW-ID"
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - old-workflow-id.txt      
+      - run:
           name: Update cloudfront distribution
           command: |
             # your code here
@@ -486,25 +499,50 @@ jobs:
       - destroy-environment
       - revert-migrations      
 
-# cleanup:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Get old stack workflow id
-#           command: |
-#             # your code here
-#             export OldWorkflowID="the id here"
-#             export STACKS=[] #put the list of stacks here
-#       - run:
-#           name: Remove old stacks and files
-#           command: |
-#             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-#             then
-#               # your code here
-#             fi
-            
+  cleanup:
+      docker:
+        # Docker image here
+        - image: amazon/aws-cli
+      steps:
+        - run:
+            name: Install dependencies
+            command: |
+              yum -y install tar gzip git      
+        # Checkout code from git
+        - checkout
+        - attach_workspace:
+            # Here we have saved old-workflow-id.txt
+            at: ~/      
+        # - run:
+        #     name: Get old stack workflow id
+        #     command: |
+        #       # your code here
+        #       export OldWorkflowID="the id here"
+        #       export STACKS=[] #put the list of stacks here
+        # - run:
+        #     name: Remove old stacks and files
+        #     command: |
+        #       if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+        #       then
+        #         # your code here
+        #       fi
+        - run:
+            name: Remove old stacks and files
+            command: |
+              export OldWorkflowID=$(cat ~/old-workflow-id.txt)
+              echo "---OldWorkflowID---"
+              echo $OldWorkflowID
+              echo "---OldWorkflowID---"
+              export TERM=ansi #Fixed: WARNING: terminal is not fully functional
+              # Delete objects in OLD S3 bucket
+              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              # Delete OLD frontend stack
+              aws cloudformation delete-stack --stack-name \
+                "stack-frontend-${OldWorkflowID}>>"  
+              # Delete OLD backend stack
+              aws cloudformation delete-stack --stack-name \
+                "stack-backend-${OldWorkflowID}"             
+
 
 workflows:
   default:
@@ -539,5 +577,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
