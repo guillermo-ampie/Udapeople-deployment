@@ -464,7 +464,7 @@ jobs:
       # - image: amazon/aws-cli
       - image: circleci/node:13.8.0
     steps:
-      - aws-cli/install
+      # - aws-cli/install
       - aws-cli/setup    
       # Checkout code from git
       - checkout
