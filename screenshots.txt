@@ -13,7 +13,7 @@
 7 .- Successful rollback after a failed smoke test. [SCREENSHOT07]
     file://./SCREENSHOT07.png
 8.- Successful promotion job. [SCREENSHOT08]
-
+    file://./SCREENSHOT08.png
 9.- Successful cleanup job. [SCREENSHOT09]
 
 10.- Only deploy on pushed to master branch. [SCREENSHOT10]
