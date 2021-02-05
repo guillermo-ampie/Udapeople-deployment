@@ -8,7 +8,7 @@
     - Endpoint: udapeople-db-01.cgtfbkqmn83e.us-west-2.rds.amazonaws.com
 
 
-* S3 bucket: 9c2e11322879b3
+* S3 bucket: udapeople-9c2e11322879b3
 
 * CIRCLECI PROJECT ENVIRONMENT VARS:
 
@@ -24,21 +24,3 @@
     - TYPEORM_USERNAME=postgres
     - TYPEORM_PASSWORD=c0cp3b1l
     - TYPEORM_DATABASE=database01
-
-databases:
-- database01
-- udapeopledb
-
-* To drop/recreate a database:
-SET AUTOCOMMIT = ON
-drop database NAME_OF_DATABASE;
-
-* To create a database:
-create database NAME_OF_DATABASE
-
-
-
-            # FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
-            # Testing: When simulating/skipping the create-infrastructure job..., 
-
-new stack: 

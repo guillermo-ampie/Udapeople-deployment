@@ -1,0 +1,37 @@
+---
+- name: Create backend directory
+  file:
+    path: ~/backend
+    state: directory
+    mode: '775'
+
+- name: Copy backend artifact file
+  copy:
+    owner: ubuntu
+    mode: '644'
+    src: backend-artifact.tar.gz
+    dest: "~/"
+
+- name: Unarchive backend artifact "backend-artifact.tar.gz"
+  unarchive:
+    owner: ubuntu
+    # mode: '644'
+    src: ~/backend-artifact.tar.gz
+    dest: ~/backend
+    remote_src: yes
+
+- name: stop backend service
+  become: yes
+  become_user: ubuntu
+  changed_when: false
+  # // the first time there is no backend service running
+  ignore_errors: yes  
+  command: pm2 stop backend
+
+- name: start backend service
+  become: yes
+  become_user: ubuntu
+  changed_when: false
+  command: pm2 start --name backend npm -- start
+  args:
+    chdir: ~/backend
