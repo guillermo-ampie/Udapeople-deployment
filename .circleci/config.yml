@@ -132,11 +132,11 @@ jobs:
           name: Test front-end
           working_directory: frontend
           command: |
-            # npm install
+            npm install
             # Test suite was failing because of: Cannot find module 'oauth-sign'
-            # npm install oauth-sign
-            # npm run-script build
-            # npm run-script test    
+            npm install oauth-sign
+            npm run-script build
+            npm run-script test    
       
   test-backend:
     docker:
@@ -153,9 +153,9 @@ jobs:
           name: Test backend-end
           working_directory: backend
           command: |
-            # npm install
-            # npm run-script build
-            # npm run-script test 
+            npm install
+            npm run-script build
+            npm run-script test 
             
   scan-frontend:
     docker:
@@ -172,8 +172,8 @@ jobs:
           name: Scan front-end
           working_directory: frontend
           command: |
-            # npm install
-            # npm audit --audit-level=critical
+            npm install
+            npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -190,8 +190,8 @@ jobs:
           name: Scan back-end
           working_directory: backend
           command: |
-            # npm install
-            # npm audit --audit-level=critical
+            npm install
+            npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
@@ -338,7 +338,6 @@ jobs:
             echo "---API_URL---"
             cat frontend/.env
             echo "---API_URL---"
-
       - restore_cache:
           keys: [frontend-build--v1]
       - run:
