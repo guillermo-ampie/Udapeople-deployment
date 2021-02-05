@@ -47,7 +47,7 @@ commands:
             SUCCESS=$(curl -H "token: 271ce878-7b96-47f1-ae12-e706830ca519" \
               --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID})
             echo "---SUCCESS---"
-            echo "$SUCCESS"
+            echo "${SUCCESS}"
             echo "---SUCCESS---"
             if(( ${SUCCESS}==1 )); 
             then
@@ -132,7 +132,6 @@ jobs:
           name: Test front-end
           working_directory: frontend
           command: |
-            echo "Testing frontend..."
             # npm install
             # Test suite was failing because of: Cannot find module 'oauth-sign'
             # npm install oauth-sign
@@ -154,7 +153,6 @@ jobs:
           name: Test backend-end
           working_directory: backend
           command: |
-            echo "Testing backend..."
             # npm install
             # npm run-script build
             # npm run-script test 
@@ -174,7 +172,6 @@ jobs:
           name: Scan front-end
           working_directory: frontend
           command: |
-            echo "Scanning frontend..."
             # npm install
             # npm audit --audit-level=critical
 
@@ -193,7 +190,6 @@ jobs:
           name: Scan back-end
           working_directory: backend
           command: |
-            echo "Scanning backend..."
             # npm install
             # npm audit --audit-level=critical
 
@@ -332,14 +328,13 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            # The following echo commands are needed when running circleci local cli
-            # echo "[web]" > .circleci/ansible/inventory.txt
-            # echo "34.219.129.153" >> .circleci/ansible/inventory.txt
             BACKEND_IP=$(grep -v "web" .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
-            echo "${API_URL}"
+            echo "---API_URL---"
             cat frontend/.env
+            echo "---API_URL---"
+
       - restore_cache:
           keys: [frontend-build--v1]
       - run:
@@ -348,16 +343,11 @@ jobs:
           command: |
             npm install
             npm run build
-            echo "Making the build..."
       - run:
           name: Deploy frontend objects
           working_directory: frontend
           command: |
             # your code here
-            echo "Deploying frontend files to S3 bucket"            
-
-            # simulating we ran again deploy-infrastructure job
-            # aws s3 sync dist s3://udapeople-bf43fab --delete
             aws s3 sync dist s3://udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" --delete
       # Here's where you will add some code to rollback on failure
       - destroy-environment
@@ -422,6 +412,9 @@ jobs:
           command: |
             # your code here
             FRONTEND_URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com"
+            echo "---FRONTEND_URL---"
+            echo "${FRONTEND_URL}"
+            echo "---FRONTEND_URL---"
             if curl -s $FRONTEND_URL | grep "Welcome"
             then
               echo "Frontend: up and running!!!"
@@ -440,6 +433,9 @@ jobs:
             BACKEND_IP=$(grep -v "web" .circleci/ansible/inventory.txt)
             BACKEND_STATUS_URL="http://${BACKEND_IP}:3030/api/status"
             echo $BACKEND_STATUS_URL > ~/backend-url.txt
+            echo "---BACKEND_STATUS_URL---"
+            echo "${BACKEND_STATUS_URL}"
+            echo "---BACKEND_STATUS_URL---"
       - run:
           name: Backend smoke test.
           command: |
@@ -464,7 +460,6 @@ jobs:
       # - image: amazon/aws-cli
       - image: circleci/node:13.8.0
     steps:
-      # - aws-cli/install
       - aws-cli/setup    
       # Checkout code from git
       - checkout
@@ -478,14 +473,14 @@ jobs:
           command: |
             aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text > ~/old-workflow-id.txt
-            echo "---OLD-WORKFLOW-ID"  
-            cat ~/old-workflow-id.txt
-            echo "---OLD-WORKFLOW-ID"
+              --no-paginate --output text > ~/old_workflow_id.txt
+            echo "---OLD_WORKFLOW_ID---"  
+            cat ~/old_workflow_id.txt
+            echo "---OLD_WORKFLOW_ID---"
       - persist_to_workspace:
           root: ~/
           paths:
-            - old-workflow-id.txt      
+            - old_workflow_id.txt      
       - run:
           name: Update cloudfront distribution
           command: |
@@ -511,7 +506,7 @@ jobs:
         # Checkout code from git
         - checkout
         - attach_workspace:
-            # Here we have saved old-workflow-id.txt
+            # Here we have saved old_workflow_id.txt
             at: ~/      
         # - run:
         #     name: Get old stack workflow id
@@ -529,16 +524,16 @@ jobs:
         - run:
             name: Remove old stacks and files
             command: |
-              export OldWorkflowID=$(cat ~/old-workflow-id.txt)
+              export OldWorkflowID=$(cat ~/old_workflow_id.txt)
               echo "---OldWorkflowID---"
-              echo $OldWorkflowID
+              echo "$OldWorkflowID"
               echo "---OldWorkflowID---"
               export TERM=ansi #Fixed: WARNING: terminal is not fully functional
               # Delete objects in OLD S3 bucket
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
               # Delete OLD frontend stack
               aws cloudformation delete-stack --stack-name \
-                "stack-frontend-${OldWorkflowID}>>"  
+                "stack-frontend-${OldWorkflowID}"  
               # Delete OLD backend stack
               aws cloudformation delete-stack --stack-name \
                 "stack-backend-${OldWorkflowID}"             
