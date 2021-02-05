@@ -2,12 +2,12 @@
     https://github.com/guillermo-ampie/Udapeople-deployment
     
 2.- Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
-    
+    http://udapeople-297b80d.s3-website-us-west-2.amazonaws.com
 
 3.- Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03]
     http://d162h0n45w9ufg.cloudfront.net
 
 4.- Public URLs to deployed application back-end in EC2 [URL04]
-    
+    http://ec2-54-201-221-82.us-west-2.compute.amazonaws.com:3030/api/status
 
 5.- Public URL to your Prometheus Server [URL05]
