@@ -561,8 +561,8 @@ workflows:
           filters:
             branches:
               # TODO: CHANGE THIS TO master branch
-              only: [circleci-project-setup]
-              # only: [master]
+              # only: [circleci-project-setup]
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
