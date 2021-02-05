@@ -557,7 +557,8 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]
       - deploy-infrastructure:
-          # requires: [test-backend, scan-backend]          
+          # requires: [test-backend, scan-backend]
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]               
           filters:
             branches:
               # TODO: CHANGE THIS TO master branch
