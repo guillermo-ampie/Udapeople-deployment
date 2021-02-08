@@ -316,7 +316,6 @@ jobs:
       # Docker image here that supports AWS CLI
       - image: circleci/node:13.8.0
     steps:
-      - aws-cli/install
       - aws-cli/setup
       # Checkout code from git
       - checkout
@@ -556,7 +555,6 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]
       - deploy-infrastructure:
-          # requires: [test-backend, scan-backend]
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]               
           filters:
             branches:
