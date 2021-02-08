@@ -196,14 +196,13 @@ jobs:
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
-      # - image: cimg/base:2021.01
       - image: amazon/aws-cli
     steps:
-      # - aws-cli/install
-      # - aws-cli/setup
       - run:
           command: |
-            yum -y install tar gzip git
+            curl -sL https://rpm.nodesource.com/setup_14.x | bash -            
+            yum -y install tar gzip git nodejs
+            # amazon-linux-extras install ansible2 -y
       # Checkout code from git
       - checkout
       - run:
@@ -251,8 +250,10 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.9.1-alpine3.12
-    steps:   
+      # - image: python:3.9.1-alpine3.12
+      - image: circleci/node:13.8.0
+    steps:
+      - aws-cli/setup
       # Checkout code from git
       - checkout
       # Add ssh keys with fingerprint
@@ -265,7 +266,7 @@ jobs:
           name: Install dependencies
           command: |
             # Your code here
-            apk add --update ansible # install the dependencies needed for your playbook
+            sudo apt -yq install python3 ansible   
       - setup-backend-environment-variables
       - run:
           name: Configure server
@@ -282,6 +283,7 @@ jobs:
       # Docker image here that supports NodeJS
       - image: circleci/node:13.8.0
     steps:
+      - aws-cli/setup
       # Checkout code from git
       - checkout
       - restore_cache:
@@ -360,6 +362,7 @@ jobs:
       # Docker image here that supports Ansible
       - image: circleci/node:13.8.0
     steps:
+      - aws-cli/setup
       # Checkout code from git
       - checkout
       # Add ssh keys with fingerprint
@@ -454,7 +457,6 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations    
-
 
   cloudfront-update:
     docker:
