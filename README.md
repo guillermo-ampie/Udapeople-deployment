@@ -1,4 +1,4 @@
-## Give your Application Auto-Deploy Superpowers
+# Give your Application Auto-Deploy Superpowers
 
 In this project, you will prove your mastery of the following learning objectives:
 
@@ -9,13 +9,13 @@ In this project, you will prove your mastery of the following learning objective
 
 ![Diagram of CI/CD Pipeline we will be building.](udapeople.png)
 
-### Instructions
+## Instructions
 
-* [Selling CI/CD](instructions/0-selling-cicd.md)
-* [Getting Started](instructions/1-getting-started.md)
-* [Deploying Working, Trustworthy Software](instructions/2-deploying-trustworthy-code.md)
-* [Configuration Management](instructions/3-configuration-management.md)
-* [Turn Errors into Sirens](instructions/4-turn-errors-into-sirens.md)
+- [Selling CI/CD](instructions/0-selling-cicd.md)
+- [Getting Started](instructions/1-getting-started.md)
+- [Deploying Working, Trustworthy Software](instructions/2-deploying-trustworthy-code.md)
+- [Configuration Management](instructions/3-configuration-management.md)
+- [Turn Errors into Sirens](instructions/4-turn-errors-into-sirens.md)
 
 ### Project Submission
 
